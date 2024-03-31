@@ -18,6 +18,7 @@ jobs:
       run: |
         REPO_NAME="${GITHUB_REPOSITORY##*/}"
         echo "REPO_TEX_NAME=${REPO_NAME}.tex" >> $GITHUB_ENV
+        echo "REPO_PDF_NAME=${REPO_NAME}.pdf" >> $GITHUB_ENV
 
     - name: Rename worksheet.tex
       run: mv worksheet.tex ${{ env.REPO_TEX_NAME }}
@@ -44,6 +45,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./${{ env.REPO_NAME }}.pdf
-        asset_name: ${{ env.REPO_NAME }}.pdf
+        asset_path: ./${{ env.REPO_PDF_NAME }}
+        asset_name: ${{ env.REPO_PDF_NAME }}
         asset_content_type: application/pdf
