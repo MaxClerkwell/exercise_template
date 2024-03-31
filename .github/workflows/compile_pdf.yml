@@ -14,10 +14,18 @@ jobs:
       with:
         submodules: 'recursive'
 
+    - name: Prepare Filename
+      run: |
+        REPO_NAME="${GITHUB_REPOSITORY##*/}"
+        echo "REPO_TEX_NAME=${REPO_NAME}.tex" >> $GITHUB_ENV
+
+    - name: Rename worksheet.tex
+      run: mv worksheet.tex ${{ env.REPO_TEX_NAME }}
+
     - name: Compile LaTeX Document
       uses: xu-cheng/latex-action@v2
       with:
-        root_file: worksheet.tex
+        root_file: ${{ env.REPO_TEX_NAME }}
         
     - name: Create Release
       id: create_release
@@ -36,6 +44,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./worksheet.pdf
-        asset_name: worksheet.pdf
+        asset_path: ./${{ env.REPO_TEX_NAME }}.pdf
+        asset_name: ${{ env.REPO_TEX_NAME }}.pdf
         asset_content_type: application/pdf
